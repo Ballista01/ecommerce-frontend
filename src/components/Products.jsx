@@ -20,7 +20,5 @@ export default function Products(props) {
 }
 
 Products.propTypes = {
-  products: PropTypes.arrayOf({
-    product: PropTypes.object,
-  }).isRequired,
+  products: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

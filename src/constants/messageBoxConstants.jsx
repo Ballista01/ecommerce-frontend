@@ -1,0 +1,2 @@
+export const MSGBOX_TYPE_ERROR = 'MSGBOX_TYPE_ERROR';
+export const MSGBOX_TYPE_INFO = 'MSGBOX_TYPE_INFO';
