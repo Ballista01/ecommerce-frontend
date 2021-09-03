@@ -1,7 +1,14 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-underscore-dangle */
 import {
-  Box, Card, CardActions, CardContent, Grid, Typography, Button,
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  Typography,
+  Button,
+  Stack,
 } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
@@ -41,11 +48,11 @@ function ProductScreen() {
       ) : error ? (
         <MessageBox type={MSGBOX_TYPE_ERROR} message={error} />
       ) : (
-        <Box>
+        <Stack p={1}>
           <Link to="/">
             <Typography variant="h6">Back to Result</Typography>
           </Link>
-          <Grid container spacing={2} flexDirection="row" sx={{ margin: 'auto' }}>
+          <Grid container flexDirection="row" spacing={2} marginTop={-1}>
             <Grid item lg={4} xs={12} sx={{ width: '100%' }}>
               <img
                 src="https://source.unsplash.com/random"
@@ -98,7 +105,7 @@ function ProductScreen() {
               </Card>
             </Grid>
           </Grid>
-        </Box>
+        </Stack>
       )}
     </Box>
   );

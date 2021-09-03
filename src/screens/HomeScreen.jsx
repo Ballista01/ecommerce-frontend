@@ -1,41 +1,28 @@
 /* eslint-disable no-nested-ternary */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Box } from '@material-ui/core';
-import axios from 'axios';
-// import sampleData from '../resource/data';
+import { useDispatch, useSelector } from 'react-redux';
 import Products from '../components/Products';
 import MessageBox from '../components/MessageBox';
 import LoadingBox from '../components/LoadingBox';
+import { listProducts, selectProductList } from '../slices/productListSlice';
 import { MSGBOX_TYPE_ERROR } from '../constants/messageBoxConstants';
 
 function HomeScreen() {
-  // const { products } = sampleData;
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const productList = useSelector(selectProductList);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const { data } = await axios.get('/api/p');
-        setLoading(false);
-        setProducts(data);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-    fetchData();
+    dispatch(listProducts);
   }, []);
   return (
-    <Box>
-      {loading ? (
+    <Box display="grid">
+      {productList.loading ? (
         <LoadingBox />
-      ) : error ? (
-        <MessageBox type={MSGBOX_TYPE_ERROR} message={error} />
+      ) : productList.error ? (
+        <MessageBox type={MSGBOX_TYPE_ERROR} message={productList.error} />
       ) : (
-        <Products products={products} />
+        <Products products={productList.products} />
       )}
     </Box>
   );
