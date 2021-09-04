@@ -13,7 +13,7 @@ function HomeScreen() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(listProducts);
+    dispatch(listProducts());
   }, []);
   return (
     <Box display="grid">

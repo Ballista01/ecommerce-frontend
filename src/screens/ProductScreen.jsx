@@ -10,43 +10,30 @@ import {
   Button,
   Stack,
 } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import { selectProductDetail, getProductDetail } from '../slices/productDetailSlice';
 import ProductRating from '../components/ProductRating';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { MSGBOX_TYPE_ERROR } from '../constants/messageBoxConstants';
 
 function ProductScreen() {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [product, setProduct] = useState({});
-  // const { products } = sampleData;
   const { productID } = useParams();
-  // const product = products.find((entry) => entry._id === productId);
+  const productDetail = useSelector(selectProductDetail);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setLoading(true);
-        const { data } = await axios.get(`/api/p/${productID}`);
-        setProduct(data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-    fetchProduct();
-  }, []);
+    dispatch(getProductDetail(productID));
+  }, [productID]);
 
   return (
-    <Box flexDirection="column">
-      {loading ? (
+    <Box display="grid">
+      {productDetail.loading ? (
         <LoadingBox />
-      ) : error ? (
-        <MessageBox type={MSGBOX_TYPE_ERROR} message={error} />
+      ) : productDetail.error ? (
+        <MessageBox type={MSGBOX_TYPE_ERROR} message={productDetail.error} />
       ) : (
         <Stack p={1}>
           <Link to="/">
@@ -56,20 +43,20 @@ function ProductScreen() {
             <Grid item lg={4} xs={12} sx={{ width: '100%' }}>
               <img
                 src="https://source.unsplash.com/random"
-                alt={product.name}
+                alt={productDetail.product.name}
                 style={{ maxHeight: '100%', maxWidth: '100%' }}
               />
             </Grid>
             <Grid item lg={4} xs={12}>
-              <Typography variant="h3">{product.name}</Typography>
+              <Typography variant="h3">{productDetail.product.name}</Typography>
               <ProductRating
-                rating={product.rating}
-                numReviews={product.numReviews}
+                rating={productDetail.product.rating}
+                numReviews={productDetail.product.numReviews}
                 productID={productID}
               />
-              <Typography variant="h4">{`$ ${product.price.toFixed(2)}`}</Typography>
+              <Typography variant="h4">{`$ ${productDetail.product.price.toFixed(2)}`}</Typography>
               <Typography variant="h5">Description:</Typography>
-              <Typography variant="p">{product.description}</Typography>
+              <Typography variant="p">{productDetail.product.description}</Typography>
             </Grid>
             <Grid item lg={4} xs={12}>
               <Card>
@@ -87,18 +74,18 @@ function ProductScreen() {
                     </Typography>
                     <Typography variant="h5" sx={{ justifySelf: 'right' }}>
                       $
-                      {product.price.toFixed(2)}
+                      {productDetail.product.price.toFixed(2)}
                     </Typography>
                     <Typography variant="h5" sx={{ justifySelf: 'left' }}>
                       Status:
                     </Typography>
                     <Typography variant="h5" sx={{ justifySelf: 'right' }}>
-                      {product.countInStock > 0 ? 'In Stock' : 'Sold Out'}
+                      {productDetail.product.countInStock > 0 ? 'In Stock' : 'Sold Out'}
                     </Typography>
                   </Grid>
                 </CardContent>
                 <CardActions>
-                  <Button disabled={product.countInStock <= 0} sx={{ flexGrow: 1 }}>
+                  <Button disabled={productDetail.product.countInStock <= 0} sx={{ flexGrow: 1 }}>
                     Add To Cart
                   </Button>
                 </CardActions>
