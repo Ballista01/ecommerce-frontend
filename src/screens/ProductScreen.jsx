@@ -9,10 +9,12 @@ import {
   Typography,
   Button,
   Stack,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 import { selectProductDetail, getProductDetail } from '../slices/productDetailSlice';
 import ProductRating from '../components/ProductRating';
 import LoadingBox from '../components/LoadingBox';
@@ -23,10 +25,16 @@ function ProductScreen() {
   const { productID } = useParams();
   const productDetail = useSelector(selectProductDetail);
   const dispatch = useDispatch();
+  const [qty, setQty] = useState(1);
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(getProductDetail(productID));
   }, [productID]);
+
+  const addToCartHandler = () => {
+    history.push(`/cart/${productID}?qty=${qty}`);
+  };
 
   return (
     <Box display="grid">
@@ -35,7 +43,7 @@ function ProductScreen() {
       ) : productDetail.error ? (
         <MessageBox type={MSGBOX_TYPE_ERROR} message={productDetail.error} />
       ) : (
-        <Stack p={1}>
+        <Stack p={2}>
           <Link to="/">
             <Typography variant="h6">Back to Result</Typography>
           </Link>
@@ -61,32 +69,41 @@ function ProductScreen() {
             <Grid item lg={4} xs={12}>
               <Card>
                 <CardContent>
-                  <Grid
-                    container
-                    sx={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr 1fr',
-                      gridTemplateRows: '1fr 1fr',
-                    }}
-                  >
-                    <Typography variant="h5" sx={{ justifySelf: 'left' }}>
-                      Price:
-                    </Typography>
-                    <Typography variant="h5" sx={{ justifySelf: 'right' }}>
-                      $
-                      {productDetail.product.price.toFixed(2)}
-                    </Typography>
-                    <Typography variant="h5" sx={{ justifySelf: 'left' }}>
-                      Status:
-                    </Typography>
-                    <Typography variant="h5" sx={{ justifySelf: 'right' }}>
-                      {productDetail.product.countInStock > 0 ? 'In Stock' : 'Sold Out'}
-                    </Typography>
-                  </Grid>
+                  <Stack spacing={1}>
+                    <Box display="flex" justifyContent="space-between">
+                      <Typography variant="h5">Price:</Typography>
+                      <Typography variant="h5">
+                        $
+                        {productDetail.product.price.toFixed(2)}
+                      </Typography>
+                    </Box>
+                    <Box display="flex" justifyContent="space-between">
+                      <Typography variant="h5" sx={{ justifySelf: 'left' }}>
+                        Status:
+                      </Typography>
+                      <Typography variant="h5" sx={{ justifySelf: 'right' }}>
+                        {productDetail.product.countInStock > 0 ? 'In Stock' : 'Sold Out'}
+                      </Typography>
+                    </Box>
+                    {productDetail.product.countInStock > 0 && (
+                      <Box display="flex" justifyContent="space-between">
+                        <Typography variant="h5">Qty:</Typography>
+                        <Select value={qty} onChange={(e) => setQty(e.target.value)}>
+                          {[...Array(productDetail.product.countInStock).keys()].map((x) => (
+                            <MenuItem value={x + 1}>{x + 1}</MenuItem>
+                          ))}
+                        </Select>
+                      </Box>
+                    )}
+                  </Stack>
                 </CardContent>
                 <CardActions>
-                  <Button disabled={productDetail.product.countInStock <= 0} sx={{ flexGrow: 1 }}>
-                    Add To Cart
+                  <Button
+                    disabled={productDetail.product.countInStock <= 0}
+                    sx={{ flexGrow: 1 }}
+                    onClick={addToCartHandler}
+                  >
+                    {productDetail.product.countInStock <= 0 ? 'Out of Stock' : 'Add To Cart'}
                   </Button>
                 </CardActions>
               </Card>
