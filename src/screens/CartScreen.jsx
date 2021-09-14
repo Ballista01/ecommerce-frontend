@@ -34,7 +34,7 @@ export default function CartScreen() {
   }, [dispatch, productID, qty]);
 
   const handleCheckOut = () => {
-    history.push('/signIn?redirect=shipping');
+    history.push('/signin?redirect=shipping');
   };
 
   return (

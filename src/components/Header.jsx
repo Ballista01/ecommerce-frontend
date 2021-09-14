@@ -9,6 +9,7 @@ import { Link, Badge } from '@material-ui/core';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCart } from '../slices/cartSlice';
+import UserProfileMenu from './UserProfileMenu';
 
 export default function Header() {
   const numItemsInCart = useSelector(selectCart).totalQty;
@@ -20,20 +21,18 @@ export default function Header() {
 
   return (
     <header className="App-header">
-      <AppBar position="sticky" color="primary">
+      <AppBar position="fixed" color="primary">
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" flexGrow={1}>
-            <Link
-              to="/"
-              component={RouterLink}
-              sx={{ textDecoration: 'none', color: 'text.primary' }}
-            >
+            <Link to="/" component={RouterLink} sx={{ textDecoration: 'none', color: 'inherit' }}>
               MERN Mall
             </Link>
           </Typography>
+
+          <UserProfileMenu />
           <IconButton edge="end" color="inherit" aria-label="cart" onClick={handleCartClick}>
             <Badge badgeContent={numItemsInCart} color="secondary">
               <ShoppingCartIcon />

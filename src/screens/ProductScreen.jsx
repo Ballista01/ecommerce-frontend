@@ -90,7 +90,9 @@ function ProductScreen() {
                         <Typography variant="h5">Qty:</Typography>
                         <Select value={qty} onChange={(e) => setQty(e.target.value)}>
                           {[...Array(productDetail.product.countInStock).keys()].map((x) => (
-                            <MenuItem value={x + 1}>{x + 1}</MenuItem>
+                            <MenuItem value={x + 1} key={`${productID}qty${x + 1}`}>
+                              {x + 1}
+                            </MenuItem>
                           ))}
                         </Select>
                       </Box>

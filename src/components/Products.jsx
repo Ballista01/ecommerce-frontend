@@ -7,7 +7,7 @@ import ProductCard from './ProductCard';
 export default function Products(props) {
   const { products } = props;
   const productList = products.map((product) => (
-    <Grid item key={product._id} xs={6} md={4} lg={3} xl={2}>
+    <Grid item key={product._id} xs={12} sm={6} md={4} lg={3} xl={2}>
       <ProductCard product={product} />
     </Grid>
   ));

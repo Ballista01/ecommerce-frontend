@@ -28,7 +28,7 @@ const productListSlice = createSlice({
 export const { productListRequest, productListFail, productListSuccess } = productListSlice.actions;
 
 export const listProducts = () => async (dispatch) => {
-  dispatch(productListRequest);
+  dispatch(productListRequest());
   try {
     const { data } = await axios.get('/api/p');
     dispatch(productListSuccess(data));

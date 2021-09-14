@@ -18,8 +18,14 @@ export default function CartEntry(props) {
   };
 
   return (
-    <Grid container alignItems="center" display="flex" direction="row" height="3rem">
-      <Grid item md={1} xs={1}>
+    <Grid
+      container
+      alignItems="center"
+      display="flex"
+      direction="row"
+      justifyContent="space-between"
+    >
+      <Grid item md={1} sm={1} xs={2}>
         <img
           src="https://source.unsplash.com/random"
           alt={product.image}
@@ -29,10 +35,10 @@ export default function CartEntry(props) {
           }}
         />
       </Grid>
-      <Grid item md={5} xs={6} flex="1 1" padding={1}>
+      <Grid item md={5} sm={5} xs={8} padding={1}>
         <Typography variant="p">{product.name}</Typography>
       </Grid>
-      <Grid item md={2} flex="0 1">
+      <Grid item md={2} sm={1} xs={2} display="flex" justifyContent="center">
         <Select value={product.qty} onChange={handleQtyChange}>
           {[...Array(product.countInStock).keys()].map((x) => (
             <MenuItem value={x + 1} key={`${product.productID}qty${x + 1}`}>
@@ -41,13 +47,11 @@ export default function CartEntry(props) {
           ))}
         </Select>
       </Grid>
-      <Grid item md={2} xs={3} display="flex" justifyContent="center">
-        <Typography variant="h5">
+      <Grid item md={4} sm={4} xs={12} display="flex" justifyContent="space-evenly">
+        <Typography variant="h5" flexGrow={1}>
           $
           {(product.price * product.qty).toFixed(2)}
         </Typography>
-      </Grid>
-      <Grid item md={2} xs={2}>
         <Button onClick={handleDelete}>Delete</Button>
       </Grid>
     </Grid>

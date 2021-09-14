@@ -13,7 +13,7 @@ export default function ProductCard(props) {
   return (
     <Link to={`/p/${product._id}`} style={{ textDecoration: 'none' }}>
       <Card key={product._id} className="card" sx={{ display: 'flex', flexDirection: 'column' }}>
-        <CardMedia component="img" image={tempImg} alt={product.name} height={300} />
+        <CardMedia component="img" image={tempImg} alt={product.name} />
         <CardContent sx={{ flexGrow: 1 }}>
           <Typography variant="h5">{product.name}</Typography>
           <ProductRating
