@@ -1,7 +1,6 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
@@ -20,12 +19,9 @@ export default function Header() {
   };
 
   return (
-    <header className="App-header">
-      <AppBar position="fixed" color="primary">
+    <header className="App-header" style={{ position: 'sticky', zIndex: 9 }}>
+      <AppBar color="primary">
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" flexGrow={1}>
             <Link to="/" component={RouterLink} sx={{ textDecoration: 'none', color: 'inherit' }}>
               MERN Mall

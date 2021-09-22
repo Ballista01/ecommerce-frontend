@@ -33,8 +33,8 @@ export default function SigninScreen() {
   return (
     <Container
       sx={{
-        marginTop: 8,
-        marginBottom: 8,
+        paddingTop: 5,
+        paddingBottom: 5,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

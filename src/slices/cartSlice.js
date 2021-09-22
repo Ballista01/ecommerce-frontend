@@ -14,10 +14,8 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    updateItemInCart: (state, action) => {
+    cartUpdateItem: (state, action) => {
       const item = action.payload;
-      // console.log('updateItemInCart payload: ');
-      // console.log(action.payload);
       const existItem = state.cartItems.find((x) => x.productID === item.productID);
       if (existItem) {
         state.cartItems = state.cartItems.map((x) => (x.productID === existItem.productID ? item : x));
@@ -27,7 +25,7 @@ const cartSlice = createSlice({
       }
       state.totalQty += action.payload.qty;
     },
-    deleteItemInCart: (state, action) => {
+    cartDeleteItem: (state, action) => {
       const productID = action.payload;
       let i;
       for (i = state.cartItems.length - 1; i >= 0; i -= 1) {
@@ -36,15 +34,31 @@ const cartSlice = createSlice({
       state.totalQty -= state.cartItems[i].qty;
       state.cartItems.splice(i, 1);
     },
+    cartSaveShippingAddress: (state, action) => {
+      state.shippingAddress = action.payload;
+    },
+    cartSavePaymentMethod: (state, action) => {
+      state.paymentMethod = action.payload;
+    },
+    cartEmpty: (state) => {
+      state.cartItems = [];
+      state.totalQty = 0;
+    },
   },
 });
 
-export const { updateItemInCart, deleteItemInCart } = cartSlice.actions;
+export const {
+  cartUpdateItem,
+  cartDeleteItem,
+  cartSaveShippingAddress,
+  cartSavePaymentMethod,
+  cartEmpty,
+} = cartSlice.actions;
 
 export const updateCartItem = (productID, qty) => async (dispatch, getState) => {
   const { data } = await axios.get(`/api/p/${productID}`);
   dispatch(
-    updateItemInCart({
+    cartUpdateItem({
       name: data.name,
       image: data.image,
       price: data.price,
@@ -57,8 +71,26 @@ export const updateCartItem = (productID, qty) => async (dispatch, getState) => 
 };
 
 export const deleteCartItem = (productID) => (dispatch, getState) => {
-  dispatch(deleteItemInCart(productID));
-  const updatedCart = getState();
+  dispatch(cartDeleteItem(productID));
+  const updatedCart = getState().cart;
+  localStorage.setItem('cart', JSON.stringify(updatedCart));
+};
+
+export const emptyCart = () => (dispatch, getState) => {
+  dispatch(cartEmpty());
+  const updatedCart = getState().cart;
+  localStorage.setItem('cart', JSON.stringify(updatedCart));
+};
+
+export const saveShippingAddress = (data) => (dispatch, getState) => {
+  dispatch(cartSaveShippingAddress(data));
+  const updatedCart = getState().cart;
+  localStorage.setItem('cart', JSON.stringify(updatedCart));
+};
+
+export const savePaymentMethod = (data) => (dispatch, getState) => {
+  dispatch(cartSavePaymentMethod(data));
+  const updatedCart = getState().cart;
   localStorage.setItem('cart', JSON.stringify(updatedCart));
 };
 

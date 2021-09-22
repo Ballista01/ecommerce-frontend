@@ -17,6 +17,11 @@ export default function UserProfileMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleProfile = () => {
+    setAnchorEl(null);
+    if (userSignin.userInfo) history.push('/profile');
+    else history.push('/signin?redirect=/profile');
+  };
   const handleSignOut = () => {
     setAnchorEl(null);
     dispatch(signOut());
@@ -24,9 +29,12 @@ export default function UserProfileMenu() {
   const handleSigninClick = () => {
     let redirect = location.pathname;
     if (redirect === '/register' || redirect === '/signin') redirect = '';
-    console.log(`redirecting to /signin?redirect=${redirect}`);
-    console.log(`localStorage.getItem('userInfo') = ${localStorage.getItem('userInfo')}`);
     history.push(`/signin${redirect}`);
+  };
+  const handleShowOrders = () => {
+    setAnchorEl(null);
+    if (userSignin.userInfo) history.push('/orderhistory');
+    else history.push('/signin?redirect=/orderhistory');
   };
 
   return (
@@ -42,7 +50,8 @@ export default function UserProfileMenu() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Settings</MenuItem>
+            <MenuItem onClick={handleShowOrders}>Orders</MenuItem>
+            <MenuItem onClick={handleProfile}>Profile</MenuItem>
             <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
           </Menu>
         </div>

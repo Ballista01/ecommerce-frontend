@@ -3,8 +3,8 @@ import React from 'react';
 
 function LoadingBox() {
   return (
-    <Stack spacing={2} p={2} justifySelf="center">
-      <CircularProgress sx={{ alignSelf: 'center' }} />
+    <Stack spacing={2} p={2} alignItems="center">
+      <CircularProgress />
       <Typography type="h4">Loading...</Typography>
     </Stack>
   );

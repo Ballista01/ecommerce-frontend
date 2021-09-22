@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { updateCartItem, deleteCartItem } from '../slices/cartSlice';
 
 export default function CartEntry(props) {
-  const { product } = props;
+  const { product, canModify } = props;
   const dispatch = useDispatch();
 
   const handleQtyChange = (e) => {
@@ -39,26 +39,44 @@ export default function CartEntry(props) {
         <Typography variant="p">{product.name}</Typography>
       </Grid>
       <Grid item md={2} sm={1} xs={2} display="flex" justifyContent="center">
-        <Select value={product.qty} onChange={handleQtyChange}>
-          {[...Array(product.countInStock).keys()].map((x) => (
-            <MenuItem value={x + 1} key={`${product.productID}qty${x + 1}`}>
-              {x + 1}
-            </MenuItem>
-          ))}
-        </Select>
+        {canModify ? (
+          <Select value={product.qty} onChange={handleQtyChange}>
+            {[...Array(product.countInStock).keys()].map((x) => (
+              <MenuItem value={x + 1} key={`${product.productID}qty${x + 1}`}>
+                {x + 1}
+              </MenuItem>
+            ))}
+          </Select>
+        ) : (
+          <Typography variant="h6">
+            {product.qty}
+            {' '}
+            {product.qty === 1 ? 'pc' : 'pcs'}
+          </Typography>
+        )}
       </Grid>
+
       <Grid item md={4} sm={4} xs={12} display="flex" justifyContent="space-evenly">
-        <Typography variant="h5" flexGrow={1}>
+        <Typography
+          variant="h5"
+          flexGrow={1}
+          display="flex"
+          justifyContent={canModify ? 'flex-start' : 'flex-end'}
+        >
           $
           {(product.price * product.qty).toFixed(2)}
         </Typography>
-        <Button onClick={handleDelete}>Delete</Button>
+        {canModify && <Button onClick={handleDelete}>Delete</Button>}
       </Grid>
     </Grid>
   );
 }
 
+CartEntry.defaultProps = {
+  canModify: true,
+};
 CartEntry.propTypes = {
+  canModify: PropTypes.bool,
   product: PropTypes.shape({
     productID: PropTypes.string.isRequired,
     countInStock: PropTypes.number,
